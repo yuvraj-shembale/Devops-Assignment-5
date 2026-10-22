@@ -1,0 +1,42 @@
+- name: Configure Web Server
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Deploy custom web page
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>AWS + Ansible Web Server</title>
+              <style>
+                body { font-family: Arial, sans-serif; margin: 40px; background-color: #f7f9fa; }
+                .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                h1 { color: #1a73e8; }
+              </style>
+            </head>
+            <body>
+              <div class="card">
+                <h1>AWS + Ansible Web Server</h1>
+                <p>This web page was deployed automatically using Ansible.</p>
+                <p><strong>Student:</strong> Yuvraj Shembale</p>
+                <p><strong>PRN:</strong> 123B1D045</p>
+                <p><strong>Server:</strong> AWS EC2 (Ubuntu)</p>
+              </div>
+            </body>
+          </html>
+        dest: /var/www/html/index.html
+        mode: '0644'
